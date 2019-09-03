@@ -1,0 +1,50 @@
+
+\RequirePackage{amsmath}
+\documentclass{svjour3}
+\usepackage{float}
+\usepackage[margin=1in]{geometry}
+\usepackage[numbers, sort&compress]{natbib}
+\usepackage{pdfpages}
+\usepackage{rotating}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[strings]{underscore}
+\usepackage{anyfontsize}
+\usepackage{subfigure}
+\usepackage{lipsum}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+
+
+
+
+
+\abstract
+
+
+\section{Introduction}
+  
+\section{Spatial models}
+The section outlines two purely spatial models that utilize only the locations of past fire in order to forecast future fire counts at the census tract level. The first is a naive ``spatial histogram'' model that serves as a performance baseline for all subsequent models described in this paper. The second employs Kernel Density Estimation (KDE), which is a statistical method commonly used to generate incident heatmaps. 
+
+\subsection{Naive count forecasting}
+The first forecasting technique described in this paper is a naive count model that can be thought of as a spatial histogram with the census tracts representing a set of non-uniform bins. The estimate for the count density rate in census tract \textit{j} covered by fire department \textit{i} is described by equation \ref{eqn:naive_count}:
+
+\begin{equation}
+  \label{eqn:naive_count}
+  \hat{\lambda}_{count,i,j} = \frac{F_{train,i,j}}{n_{train}A_{i,j}} 
+\end{equation}
+
+Where $\hat{\lambda}_{count,i,j}$ is the estimated average fire density per year, $F_{train,i,j}$ is the total number of fires in census tract \textit{i, j} that occurred during the training interval, $n_{train}$ is the number of years that comprise the training interval (6 years), and $A_{i,j}$ is the land area of census tract \textit{i, j}.
+
+
+
+
+
+
+\clearpage
+\bibliographystyle{unsrtnat}
+\bibliography{./papers/references}
+\end{document}

@@ -24,10 +24,30 @@
 \section{Introduction}
   
   
-  
-\section{Modeling overview}
+\section{Methodology}
 The goal of the models presented in this paper is to predict the number of fires that occur in each census tract in the dataset over a five-year ``test" interval, comprising of the years 2012-2016 (inclusive). All models are strictly informed only by records that were completed prior to the end of the year 2011. This includes geocoded NFIRS data for residential fires that occurred the training interval, as well as the population, demographic, and housing unit information reported in the 2006-2010 American Community Survey 5-year estimates. Training the models using only data completed prior to the testing interval allows for the evaluation of the models' ability to make future predictions.
-The quantity used to evaluate the efficacy of a forecasting model is the Poisson deviance, which is calculated according to equation \ref{eqn:deviance}:
+
+
+\section{Modeling overview}
+The theoretical framework common to all models is that the occurrence of residential fires within each department follows a spatially inhomogeneous point process with an intensity function $\lambda_{i}(\textbf{x})$ 
+where \textbf{x} is a point located in $\textbf{R}^2$ within the coverage area of department \textit{i}. $\Lambda_{i,j}$, described in equation \ref{eqn:rate_description}:
+
+\begin{equation}
+  \label{eqn:rate_description}
+  \Lambda_{i,j} = \int_{B_{i,j}} \lambda_{i}(\textbf{x})d\textbf{x}
+\end{equation}
+
+\noindent where $B_{i,j}$ is the geographic area of census tract \textit{i,j}. Each of the models provides the estimated average rate of residential fires at the census tract level, $\hat\Lambda_{ij}$. Because this quantity is assumed to be temporally homogeneous\footnote{Note that in the most general sense, the intensity can also vary temporally such that $\lambda_i = \lambda_i(\textbf{x},t)$. Although the authors made various attempts to estimate the temporal evolution of $\lambda_i$, the large variance in the count data made it difficult to infer transient trends from the 6-year training interval that improve predictions relative to the assumption that $\lambda_i$ is temporally homogeneous.}, the prediction for the number of fires that occur during the test interval is then calculated according to equation \ref{eqn:rate_integral}: 
+
+\begin{equation}
+  \label{eqn:rate_integral}
+  \hat{f}_{test,i,j} = \int_{0}^{n_{test}}\hat\Lambda_{i,j}dt
+  = n_{test}\hat\Lambda_{i,j}
+\end{equation}
+
+\noindent where $n_{test}$ is the duration of the test interval (5 years) and $\hat{f}_{test,i,j}$ is the predicted number of fires that occur during the test interval.
+
+Then the efficacy of a model's prediction is then quantified using the Poisson deviance, which is calculated according to equation \ref{eqn:deviance}:
 
 \begin{equation}
   \label{eqn:deviance}
@@ -37,25 +57,8 @@ The quantity used to evaluate the efficacy of a forecasting model is the Poisson
   \bigg]
 \end{equation}
 
-\noindent Where $N_i$ is the number of census tracts covered by department \textit{i}, $f_{test,i,j}$ is the number of residential fires that occurred in census tract \textit{i,j} during the 5-year test interval, and $\hat{f}_{test,i,j}$ is corresponding model prediction. A lower deviance indicates more accurate predictions, with a deviance of zero corresponding to a model that perfectly predicted the number of residential fires that occurred in each census tract during the test interval.
+\noindent where $N_i$ is the number of census tracts covered by department \textit{i}, $f_{test,i,j}$ is the number of residential fires that actually occurred in census tract \textit{i,j} during the 5-year test interval A lower deviance indicates more accurate predictions, with a deviance of zero corresponding to a model that perfectly predicted the number of residential fires that occurred in each census tract during the test interval.
 
-The theoretical framework common to all models is that the occurrence of residential fires within each department follows a spatially inhomogeneous point process with an intensity function $\lambda_{i}(\textbf{x})$ 
-where \textbf{x} is a point located in $\textbf{R}^2$ within the coverage area of department \textit{i}. $\Lambda_{i,j}$, described in equation \ref{eqn:rate_description}:
-
-\begin{equation}
-  \label{eqn:rate_description}
-  \Lambda_{i,j} = \int_{B_{i,j}} \lambda_{i}(\textbf{x})d\textbf{x}
-\end{equation}
-
-Each of the models provides the estimated average rate of residential fires at the census tract level, $\hat\Lambda_{ij}$. Because this quantity is assumed to be temporally homogeneous\footnote{Note that in the most general sense, the intensity can also vary temporally such that $\lambda_i = \lambda_i(\textbf{x},t)$. Although the authors made various attempts to estimate the temporal evolution of $\lambda_i$, the large variance in the count data made it difficult to infer transient trends from the 6-year training interval that improve predictions relative to the assumption that $\lambda_i$ is temporally homogeneous.}, the prediction for the number of fires that occur during the test interval is then calculated according to equation \ref{eqn:rate_integral}: 
-
-\begin{equation}
-  \label{eqn:rate_integral}
-  \hat{f}_{test,i,j} = \int_{0}^{n_{test}}\hat\Lambda_{i,j}dt
-  = n_{test}\hat\Lambda_{i,j}
-\end{equation}
-
-\noindent where $n_{test}$ is the length of the test interval (5 years).
 
 
 \subsection{Spatial models}
@@ -73,13 +76,38 @@ The simplest forecasting technique described in this paper is a naive count mode
 
 
 \begin{figure}[htb] \centering
-\includegraphics[width=.75\textwidth]{./figures/spatial_histogram.png}
-\caption{A visual depiction of the naive count forecasting methodology for an example department. The black "x" markers each indicate the loction of a residiental fire that occurred during the six-year training interval, 2006-2011 (inclusive).}
+\includegraphics[width=.5\textwidth]{./figures/spatial_histogram.png}
+\caption{A visual depiction of the naive count forecasting methodology for an example department. The black dot markers indicate the location of a residential fire that occurred during the six-year training interval, 2006-2011 (inclusive). The color corresponds to the fire count density rate estimated from this approach. Notice that large census tracts with few fires have the lowest density rate and small tracts with many fires have the highest density rate.}
 \label{fig:spatial_histogram}
 \end{figure}
 
 \subsubsection{Kernel density estimation}
-The second spatial model discussed in this paper is Kernel density estimation (KDE), which is a statistical methodology for inferring a density distribution from a set of point observations. This is the framework commonly used to generate incident heatmaps. The major difference between this method and the one outlined in the previous section is that is generates a smoothed surface that does not arise from ''binning" the incidents into discrete areas such as the census tract boundaries. Instead, this density surface is generated by centering a kernel function on each point (i.e. residential fire location) in the training set. The density function can then be calculated at any location by summing the kernel functions of all points at that location. This approach is illustrated in Figure ___. In order to provide intuition, a one dimensional example is also shown in addition to an example depicting the residential fire density for a department in the dataset. 
+The second spatial model discussed in this paper is Kernel density estimation (KDE), which is a statistical methodology for inferring a density distribution from a set of point observations. This is the framework commonly used to generate incident heatmaps. The major difference between this method and the one outlined in the previous section is that KDE results  a smoothed surface that does not arise from ``binning" the incidents into discrete areas such as the census tract boundaries. Instead, this density surface is generated by centering a kernel function on each point (i.e. residential fire location) in the training set. The density function can then be calculated at any location by summing the kernel functions of all past residential fires at that location. This process is described by equation \ref{eqn:kde}:
+
+\begin{equation}
+  \label{eqn:kde}
+  \hat\lambda_{i,KDE}(\textbf{x}) = \frac{1}{n_{train}}\sum_{m=1}^{F_i}K_i(\textbf{x},\tilde{\textbf{x}}_{i,m})
+\end{equation}
+
+\noindent where $F_i$ is the total number of fires that occurred during the training interval, and $\tilde{\textbf{x}}_{i,m}$ is the location of the $m^{th}$ residential fire that occured during the training interval in the coverage area of department \textit{i}. Note that the subscript \textit{j} is not used here because $\hat\lambda_{i,KDE}(\textbf{x})$ does not depend on census tract geometries. $K_i(\textbf{x},\tilde{\textbf{x}}_{i,m})$ is a department-specific kernel function. The KDE predictions described in this paper were obtained using a two-dimensional isotropic Gaussian kernel, described in equation \ref{eqn:gaussian_kernel}:
+
+
+\begin{equation}
+  \label{eqn:gaussian_kernel}
+  K_i(\textbf{x},\tilde{\textbf{x}}_{i,m}) = \frac{1}{2\pi b_{i}^2}exp\bigg(\frac{d^2_i(\textbf{x},\tilde{\textbf{x}}_{i,m})}{2b_{i}^2}\bigg)
+\end{equation}
+
+\noindent where $d_i(\textbf{x},\tilde{\textbf{x}}_{i,m})= ||\textbf{x} - \tilde{\textbf{x}}_{i,m}||_2$, the euclidean distance between an arbitrary point \textbf{x} and $\tilde{\textbf{x}}_{i,m}$. $b_i$ is the department-specific bandwidth. Loosely speaking, it represents the length scale over which past fires elevate the estimated fire risk of surrounding areas. An important attribute of the kernel used in these analyses is that $\int_{\textbf{x} \in \textbf{R}^2}K_i(\textbf{x},\tilde{\textbf{x}}_{i,m})d\textbf{x} = 1$, and by extension, $n_{train}\int_{\textbf{x} \in \textbf{R}^2}\hat\lambda_{i,KDE}(\textbf{x}) d\textbf{x} = F_i$. In other words, the total kernel density is equal to the total number of fires that occurred during the training interval. In order to provide intuition for the reader, a simplified illustration of the KDE approach is provided in Figure \ref{fig:1dkde}.
+
+\begin{figure}[htb] \centering
+\includegraphics[width=.5\textwidth]{./figures/1dkde.png}
+\caption{A simplified one-dimensional illustration of the KDE method. Although the locations of residential fires are defined in $\textbf{R}^2$, the use of a location coordinate defined in $\textbf{R}$ allows for an intuitive visualization. Five points (indicated by the ``X" markers) are drawn from a standard normal distribution, so that the true density function (the blue curve) is five times the standard normal probability distribution. The dashed black curves indicate Gaussian kernels centered on each point, and the red curve shows the KDE result, which is the sum of the kernels.}
+\label{fig:1dkde}
+\end{figure}
+
+A key consideration for generating meaningful results from KDE is the selection of the bandwidth parameter, $b_i$. Selecting too small of a bandwidth results in density estimates that have highly localized peaks that correspond to the locations of past incidents; conversely, selecting too large of a bandwidth results in an overly smoothed density estimate that tends towards a uniform density profile as $b_i \rightarrow  \infty$.
+
+
 
 
 

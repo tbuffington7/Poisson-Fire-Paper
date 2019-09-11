@@ -212,29 +212,29 @@ A key consideration for generating meaningful results from KDE is the selection 
               \label{fig:frac_rented} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_rented.png}
           }%
           \subfigure[Fraction of housing units occupied by the owner]{%
-             \label{fig:frac_owner} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1_unit.png}
-          } %           
-          \subfigure[Fraction of housing units that are ]{%
-             \label{fig:frac_1_unit} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1_unit.png}
-          } % 
-            \subfigure[Fraction of housing units built between 1970 and 1989]{%
+             \label{fig:frac_owner} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_owner.png}
+          }\\ %           
+          \subfigure[Fraction of housing units that are vacant ]{%
              \label{fig:frac_vacant} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_vacant.png}
+          } % 
+            \subfigure[Fraction of housing units that are single (not apartments)]{%
+             \label{fig:frac_1_unit} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1_unit.png}
           }
       \end{center}
-      \caption{Scatterplot of observed fire density rates ($\hat\Lambda_{count}$) during the training interval as a function of population density for census tracts in the top quartile (red) and bottom quartile (blue) of the specified quantity relating to structure age. For example, in \protect\subref{fig:frac_1950}, the red dots represent census tracts with fractions of housing units built before 1950 in the top 25\% of all tracts in the dataset. Conversely, the blue dots represent census tracts with fractions of housing units bulit before 1950 in the bottom 25\% of all census tracts in the dataset.}
+      \caption{Scatterplot of observed fire density rates ($\hat\Lambda_{count}$) during the training interval as a function of population density for census tracts in the top quartile (red) and bottom quartile (blue) of the specified quantity relating to occupancy. For example, in \protect\subref{fig:frac_rented}, the red dots represent census tracts with fractions of housing units occupied by a renter in the top 25\% of all tracts in the dataset. Conversely, the blue dots represent census tracts with fractions of housing units occupied by a renter in the bottom 25\% of all census tracts in the dataset.}
      \label{fig:occupancy}
   \end{figure}
-  
-  
-  
-  
-  
+ 
   \subsubsection{A hierarchical Bayesian Poisson regression model}
   
   
   \subsection{Combining spatial, structural, and demographic information}
   
   \section{Model evaluation and comparison}
+  
+  
+  
+  
   
   \section{conclusion}
   

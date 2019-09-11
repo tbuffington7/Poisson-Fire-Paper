@@ -1,5 +1,7 @@
 
 \RequirePackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 \documentclass{svjour3}
 \usepackage{float}
 \usepackage[margin=1in]{geometry}
@@ -16,7 +18,6 @@
 \usepackage[utf8]{inputenc}
 
 \begin{document}
-
 
 \abstract
 
@@ -64,7 +65,7 @@ Then the efficacy of a model's prediction is then quantified using the Poisson d
 \subsection{Spatial models}
 The section outlines two purely spatial models that utilize only the locations of past fire in order to forecast future fire counts at the census tract level. The first is a naive ``spatial histogram'' model that serves as a performance baseline for all subsequent models described in this paper. The second employs Kernel Density Estimation (KDE), which is a statistical method commonly used to generate incident heatmaps. 
 
-\subsubsection{Naive count forecasting}
+\subsubsection{Naive count forecasting (spatial histogram)}
 The simplest forecasting technique described in this paper is a naive count model that can be thought of as a spatial histogram with the census tracts representing a set of non-uniform bins. The estimate for the count density rate in census tract \textit{j} covered by fire department \textit{i} is described by equation \ref{eqn:naive_count}:
 
 \begin{equation}
@@ -105,7 +106,52 @@ The second spatial model discussed in this paper is Kernel density estimation (K
 \label{fig:1dkde}
 \end{figure}
 
-A key consideration for generating meaningful results from KDE is the selection of the bandwidth parameter, $b_i$. Selecting too small of a bandwidth results in density estimates that have highly localized peaks that correspond to the locations of past incidents; conversely, selecting too large of a bandwidth results in an overly smoothed density estimate that tends towards a uniform density profile as $b_i \rightarrow  \infty$.
+A key consideration for generating meaningful results from KDE is the selection of the bandwidth parameter, $b_i$. Selecting too small of a bandwidth results in density estimates that have highly localized peaks that correspond to the locations of past incidents; conversely, selecting too large of a bandwidth results in an overly smoothed density estimate that tends towards a uniform density profile as $b_i \rightarrow  \infty$. Figure \ref{fig:band_comparison} shows the effect of different bandwidth on the resulting KDE heatmaps along with the "optimized bandwidth" which is obtained through 5-fold cross validation. This technique randomly splits the training data into five groups of approximately equal size. Using a specific value for $b_i$, a KDE map is generated using the data from four of the five groups or folds. The algorithm then determines the likelihood of the the locations of the fires in the excluded fold using the map generated from incidents in the four remaining folds. This likelihood arises from the fact that $\frac{n_{train}}{F_i}\hat\lambda_{i,KDE}(\textbf{x})$ is actually an estimate of the probability density function for the location of a new fire. This process is then repeated so that each of the five folds are excluded, and 100 logarithmically spaced values of $b_i$ are evaluated over the interval $[0.01,10]$ miles and the bandwidth that generated KDE maps with the highest predictive accuracy is chosen as the optimal bandwidth, $b_{i,opt}$. This optimization process is described mathematically by equation \ref{eqn:fivefold}:
+
+\begin{equation}
+  \label{eqn:fivefold}
+   b_{opt,i} = \argmax_{b_i} \prod_{k=1}^5 \prod_{m \in E_k}   \hat\lambda_{i,k}(\tilde{\textbf{x}}_m,b_i)
+\end{equation}
+
+
+\noindent where $\hat\lambda_{i,k}(\tilde{\textbf{x}}_m,b_i)$ is the KDE function that is generated using a bandwidth of $b_i$ and also excluding incidents in the k$^{th}$ fold, $E_k$. 
+
+\begin{figure}[!htb]
+       \begin{center}
+  %
+          \subfigure[$b_i=0.1$ mi]{%
+              \label{fig:smallband} \includegraphics[width=5cm,keepaspectratio]{figures/small_band.png}
+          }%
+          \subfigure[$b_i= 1.0$ mi]{%
+             \label{fig:largeband} \includegraphics[width=5cm,keepaspectratio]{figures/large_band.png}
+          } % 
+            \subfigure[$b_i=b_{i,opt}=0.43$ mi]{%
+             \label{fig:optband} \includegraphics[width=5cm,keepaspectratio]{figures/correct_band.png}
+          } % ------- End of the first row ----------------------%
+      \end{center}
+      \caption{ Visual depiction of the effect of different bandwidth values for heatmaps generated from KDE. The bandwidth is too small in \protect\subref{fig:smallband}, which is apparent from the many localized ``hotspots."  Conversely, the bandwidth is too large in \protect\subref{fig:largeband}, and the result is an overly smoothed heatmap. \protect\subref{fig:optband} shows the heatmap with the optimized bandwidth.}
+     \label{fig:band_comparison}
+  \end{figure}
+
+The results from the optimizations give insight into the distances over which fire risk factors vary with the departments in the dataset. 
+
+\begin{figure}[!htb]
+       \begin{center}
+  %
+          \subfigure[$b_i=0.1$ mi]{%
+              \label{fig:bhist} \includegraphics[width=5cm,keepaspectratio]{figures/small_band.png}
+          }%
+          \subfigure[$b_i= 1.0$ mi]{%
+             \label{fig:largeband} \includegraphics[width=5cm,keepaspectratio]{figures/large_band.png}
+          } % 
+           % ------- End of the first row ----------------------%
+      \end{center}
+      \caption{ Visual depiction of the effect of different bandwidth values for heatmaps generated from KDE. The bandwidth is too small in \protect\subref{fig:smallband}, which is apparent from the many localized ``hotspots."  Conversely, the bandwidth is too large in \protect\subref{fig:largeband}, and the result is an overly smoothed heatmap. \protect\subref{fig:optband} shows the heatmap with the optimized bandwidth.}
+     \label{fig:band_comparison}
+  \end{figure}
+
+
+
 
 
 

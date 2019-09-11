@@ -159,21 +159,71 @@ A key consideration for generating meaningful results from KDE is the selection 
   \begin{figure}[!htb]
        \begin{center}
   %
-          \subfigure[$b_i=0.1$ mi]{%
-              \label{fig:} \includegraphics[width=5cm,keepaspectratio]{figures/small_band.png}
+          \subfigure[Median income]{%
+              \label{fig:median_income} \includegraphics[width=7.5cm,keepaspectratio]{figures/median_income.png}
           }%
-          \subfigure[$b_i= 1.0$ mi]{%
-             \label{fig:largeband} \includegraphics[width=5cm,keepaspectratio]{figures/large_band.png}
-          } % 
-            \subfigure[$b_i=b_{i,opt}=0.43$ mi]{%
-             \label{fig:optband} \includegraphics[width=5cm,keepaspectratio]{figures/correct_band.png}
-          }\\ % ------- End of the first row ----------------------%
+          \subfigure[Fraction of population holding college degrees]{%
+             \label{fig:frac_degree} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_degree.png}
+          }\\ % 
+            \subfigure[Fraction of population that is Black]{%
+             \label{fig:frac_black} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_black.png}
+          }
+            \subfigure[Fraction of population that is White]{%
+             \label{fig:frac_white} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_white.png}
+          }\\
+            \subfigure[Fraction of population that is Asian]{%
+             \label{fig:frac_asian} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_asian.png}
+          }
+            \subfigure[Fraction of population that is Hispanic]{%
+             \label{fig:frac_hispanic} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_hispanic.png}
+          }
+          
       \end{center}
-      \caption{ Visual depiction of the effect of different bandwidth values for heatmaps generated from KDE. The bandwidth is too small in \protect\subref{fig:smallband}, which is apparent from the many localized ``hotspots."  Conversely, the bandwidth is too large in \protect\subref{fig:largeband}, and the result is an overly smoothed heatmap. \protect\subref{fig:optband} shows the heatmap with the optimized bandwidth.}
+      \caption{Scatterplot of observed fire density rates ($\hat\Lambda_{count}$) during the training interval as a function of population density for census tracts in the top quartile (red) and bottom quartile (blue) of the specified sociodemographic quantities. For example, in \protect\subref{fig:median_income}, the red dots represent census tracts with median incomes in the top 25\% of all tracts in the dataset. Conversely, the blue dots represent census tracts with median incomes in the bottom 25\% of all census tracts in the dataset.}
      \label{fig:sociodemographic}
   \end{figure}
-  
-  
+ 
+   \begin{figure}[!htb]
+       \begin{center}
+  %
+          \subfigure[Fraction of housing units built before 1950]{%
+              \label{fig:frac_1950} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1950.png}
+          }%
+          \subfigure[Fraction of housing units built between 1950 and 1969]{%
+             \label{fig:frac1950_1969} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1950_1969.png}
+          }\\ % 
+            \subfigure[Fraction of housing units built between 1970 and 1989]{%
+             \label{fig:frac_1970_1989} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1970_1989.png}
+          }
+            \subfigure[Fraction of housing units built in 1990 or later]{%
+             \label{fig:frac_1990} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1990.png}
+          }\\
+          
+      \end{center}
+      \caption{Scatterplot of observed fire density rates ($\hat\Lambda_{count}$) during the training interval as a function of population density for census tracts in the top quartile (red) and bottom quartile (blue) of the specified quantity relating to structure age. For example, in \protect\subref{fig:frac_1950}, the red dots represent census tracts with fractions of housing units built before 1950 in the top 25\% of all tracts in the dataset. Conversely, the blue dots represent census tracts with fractions of housing units bulit before 1950 in the bottom 25\% of all census tracts in the dataset.}
+     \label{fig:building age}
+  \end{figure}
+ 
+ 
+   \begin{figure}[!htb]
+       \begin{center}
+  %
+          \subfigure[Fraction of housing units occupied by a renter]{%
+              \label{fig:frac_rented} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_rented.png}
+          }%
+          \subfigure[Fraction of housing units occupied by the owner]{%
+             \label{fig:frac_owner} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1_unit.png}
+          } %           
+          \subfigure[Fraction of housing units that are ]{%
+             \label{fig:frac_1_unit} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1_unit.png}
+          } % 
+            \subfigure[Fraction of housing units built between 1970 and 1989]{%
+             \label{fig:frac_vacant} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_vacant.png}
+          }
+      \end{center}
+      \caption{Scatterplot of observed fire density rates ($\hat\Lambda_{count}$) during the training interval as a function of population density for census tracts in the top quartile (red) and bottom quartile (blue) of the specified quantity relating to structure age. For example, in \protect\subref{fig:frac_1950}, the red dots represent census tracts with fractions of housing units built before 1950 in the top 25\% of all tracts in the dataset. Conversely, the blue dots represent census tracts with fractions of housing units bulit before 1950 in the bottom 25\% of all census tracts in the dataset.}
+     \label{fig:occupancy}
+  \end{figure}
   
   
   

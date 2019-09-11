@@ -62,8 +62,8 @@ Then the efficacy of a model's prediction is then quantified using the Poisson d
 
 
 
-\subsection{Spatial models}
-The section outlines two purely spatial models that utilize only the locations of past fire in order to forecast future fire counts at the census tract level. The first is a naive ``spatial histogram'' model that serves as a performance baseline for all subsequent models described in this paper. The second employs Kernel Density Estimation (KDE), which is a statistical method commonly used to generate incident heatmaps. 
+\subsection{Utilizing spatial information}
+The section outlines two purely spatial models that utilize only the locations of past fire in order to forecast future fire counts at the census tract level. The central assumption of these models is that fire risk factors are chronic, and proximity to previous fires indicates elevated risk to future fires. The first model is a naive ``spatial histogram'' model that serves as a performance baseline for all subsequent models described in this paper. The second employs Kernel Density Estimation (KDE), which is a statistical method commonly used to generate incident heatmaps. 
 
 \subsubsection{Naive count forecasting (spatial histogram)}
 The simplest forecasting technique described in this paper is a naive count model that can be thought of as a spatial histogram with the census tracts representing a set of non-uniform bins. The estimate for the count density rate in census tract \textit{j} covered by fire department \textit{i} is described by equation \ref{eqn:naive_count}:
@@ -132,23 +132,62 @@ A key consideration for generating meaningful results from KDE is the selection 
       \caption{ Visual depiction of the effect of different bandwidth values for heatmaps generated from KDE. The bandwidth is too small in \protect\subref{fig:smallband}, which is apparent from the many localized ``hotspots."  Conversely, the bandwidth is too large in \protect\subref{fig:largeband}, and the result is an overly smoothed heatmap. \protect\subref{fig:optband} shows the heatmap with the optimized bandwidth.}
      \label{fig:band_comparison}
   \end{figure}
-
-The results from the optimizations give insight into the distances over which fire risk factors vary with the departments in the dataset. 
+  
+ As previously indicated, the central idea of KDE is that proximity to past fires elevates the probability of future fires, and $b_opt$ is the distance that best specifies this proximity\footnote{Approximately 95\% of the kernel density from an incident is located within $2b_i$ of the incident location.} for predicting the locations of ``out of sample" fires. This means that the results obtained from the bandwidth optimizations give insight into the distances over which fire risk factors vary within the coverage areas of the departments in the dataset.
 
 \begin{figure}[!htb]
        \begin{center}
   %
+          \subfigure[Histogram of optimized bandwidths]{%
+              \label{fig:bhist} \includegraphics[width=7.5cm,keepaspectratio]{figures/optimal_band_dist.png}
+          }%
+          \subfigure[Scatterplot of optimized bandwidths vs. average department population density]{%
+             \label{fig:popband} \includegraphics[width=7.5cm,keepaspectratio]{figures/boptvspopdensity.png}
+          } % 
+           % ------- End of the first row ----------------------%
+      \end{center}
+      \caption{\protect\subref{fig:bhist} shows the variation of the optimized bandwidth across departments in the dataset, and the negative correlation apparent in \protect\subref{fig:popband} shows that this variation is at least partially explained by the variation in population density across departments.}
+     \label{fig:band_optimization}
+  \end{figure}
+  
+  
+  \subsection{Utilizing demographic and structural information}
+  
+  
+  
+  \subsubsection{Feature visualization}
+  \begin{figure}[!htb]
+       \begin{center}
+  %
           \subfigure[$b_i=0.1$ mi]{%
-              \label{fig:bhist} \includegraphics[width=5cm,keepaspectratio]{figures/small_band.png}
+              \label{fig:} \includegraphics[width=5cm,keepaspectratio]{figures/small_band.png}
           }%
           \subfigure[$b_i= 1.0$ mi]{%
              \label{fig:largeband} \includegraphics[width=5cm,keepaspectratio]{figures/large_band.png}
           } % 
-           % ------- End of the first row ----------------------%
+            \subfigure[$b_i=b_{i,opt}=0.43$ mi]{%
+             \label{fig:optband} \includegraphics[width=5cm,keepaspectratio]{figures/correct_band.png}
+          }\\ % ------- End of the first row ----------------------%
       \end{center}
       \caption{ Visual depiction of the effect of different bandwidth values for heatmaps generated from KDE. The bandwidth is too small in \protect\subref{fig:smallband}, which is apparent from the many localized ``hotspots."  Conversely, the bandwidth is too large in \protect\subref{fig:largeband}, and the result is an overly smoothed heatmap. \protect\subref{fig:optband} shows the heatmap with the optimized bandwidth.}
-     \label{fig:band_comparison}
+     \label{fig:sociodemographic}
   \end{figure}
+  
+  
+  
+  
+  
+  
+  
+  \subsubsection{A hierarchical Bayesian Poisson regression model}
+  
+  
+  \subsection{Combining spatial, structural, and demographic information}
+  
+  \section{Model evaluation and comparison}
+  
+  \section{conclusion}
+  
 
 
 

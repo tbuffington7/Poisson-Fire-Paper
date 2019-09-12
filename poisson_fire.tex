@@ -230,17 +230,29 @@ A key consideration for generating meaningful results from KDE is the selection 
   
   \subsection{Combining spatial, structural, and demographic information}
   
+  
+  
+\begin{figure}[htb] \centering
+\includegraphics[width=.5\textwidth]{figures/spatial_correlation.png}
+\caption{SPATIAL CORRELATION}
+\label{fig:spatialcorr}
+\end{figure}
+  
+  
+  
+  
+  
   \begin{figure}[!htb]
        \begin{center}
   %
-          \subfigure[Fraction of housing units occupied by a renter]{%
-              \label{fig:frac_rented} \includegraphics[width=7cm,keepaspectratio]{figures/tract_num.png}
+          \subfigure[Layout of census tracts]{%
+              \label{fig:tract_layout} \includegraphics[width=7cm,keepaspectratio]{figures/tract_num.png}
           }%
-          \subfigure[Fraction of housing units occupied by the owner]{%
-             \label{fig:frac_owner} \includegraphics[width=8cm,keepaspectratio]{figures/sep_matrix.png}
+          \subfigure[Distance matrix based on neighbors]{%
+             \label{fig:distance_mat} \includegraphics[width=7.9cm,keepaspectratio]{figures/sep_matrix.png}
           } %           
       \end{center}
-      \caption{Scatterplot of observed fire density rates ($\hat\Lambda_{count}$) during the training interval as a function of population density for census tracts in the top quartile (red) and bottom quartile (blue) of the specified quantity relating to occupancy. For example, in \protect\subref{fig:frac_rented}, the red dots represent census tracts with fractions of housing units occupied by a renter in the top 25\% of all tracts in the dataset. Conversely, the blue dots represent census tracts with fractions of housing units occupied by a renter in the bottom 25\% of all census tracts in the dataset.}
+      \caption{An example of the resulting distance matrix for a department}
      \label{fig:sep_example}
   \end{figure}
   
@@ -250,7 +262,11 @@ A key consideration for generating meaningful results from KDE is the selection 
   
   
   \section{Model evaluation and comparison}
-  
+  \begin{figure}[htb] \centering
+\includegraphics[width=.5\textwidth]{./figures/1dkde.png}
+\caption{A simplified one-dimensional illustration of the KDE method. Although the locations of residential fires are defined in $\textbf{R}^2$, the use of a location coordinate defined in $\textbf{R}$ allows for an intuitive visualization. Five points (indicated by the ``X" markers) are drawn from a standard normal distribution, so that the true density function (the blue curve) is five times the standard normal probability distribution. The dashed black curves indicate Gaussian kernels centered on each point, and the red curve shows the KDE result, which is the sum of the kernels.}
+\label{fig:1dkde}
+\end{figure}
   
   
   

@@ -77,7 +77,7 @@ The simplest forecasting technique described in this paper is a naive count mode
 
 
 \begin{figure}[htb] \centering
-\includegraphics[width=.5\textwidth]{./figures/spatial_histogram.pdf}
+\includegraphics[width=.75\textwidth]{./figures/spatial_histogram.pdf}
 \caption{A visual depiction of the naive count forecasting methodology for an example department. The black dot markers indicate the location of a residential fire that occurred during the six-year training interval, 2006-2011 (inclusive). The color corresponds to the fire count density rate estimated from this approach. Notice that large census tracts with few fires have the lowest density rate and small tracts with many fires have the highest density rate.}
 \label{fig:spatial_histogram}
 \end{figure}
@@ -101,7 +101,7 @@ The second spatial model discussed in this paper is Kernel density estimation (K
 \noindent where $d_i(\textbf{x},\tilde{\textbf{x}}_{i,m})= ||\textbf{x} - \tilde{\textbf{x}}_{i,m}||_2$, the euclidean distance between an arbitrary point \textbf{x} and $\tilde{\textbf{x}}_{i,m}$. $b_i$ is the department-specific bandwidth. Loosely speaking, it represents the length scale over which past fires elevate the estimated fire risk of surrounding areas. An important attribute of the kernel used in these analyses is that $\int_{\textbf{x} \in \textbf{R}^2}K_i(\textbf{x},\tilde{\textbf{x}}_{i,m})d\textbf{x} = 1$, and by extension, $n_{train}\int_{\textbf{x} \in \textbf{R}^2}\hat\lambda_{i,KDE}(\textbf{x}) d\textbf{x} = F_i$. In other words, the total kernel density is equal to the total number of fires that occurred during the training interval. In order to provide intuition for the reader, a simplified illustration of the KDE approach is provided in Figure \ref{fig:1dkde}.
 
 \begin{figure}[htb] \centering
-\includegraphics[width=.5\textwidth]{./figures/1dkde.pdf}
+\includegraphics[width=.75\textwidth]{./figures/1dkde.pdf}
 \caption{A simplified one-dimensional illustration of the KDE method. Although the locations of residential fires are defined in $\textbf{R}^2$, the use of a location coordinate defined in $\textbf{R}$ allows for an intuitive visualization. Five points (indicated by the ``X" markers) are drawn from a standard normal distribution, so that the true density function (the blue curve) is five times the standard normal probability distribution. The dashed black curves indicate Gaussian kernels centered on each point, and the red curve shows the KDE result, which is the sum of the kernels.}
 \label{fig:1dkde}
 \end{figure}
@@ -119,13 +119,13 @@ A key consideration for generating meaningful results from KDE is the selection 
        \begin{center}
   %
           \subfigure[$b_i=0.1$ mi]{%
-              \label{fig:smallband} \includegraphics[width=5cm,keepaspectratio]{figures/small_band.pdf}
+              \label{fig:smallband} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/small_band.pdf}
           }%
           \subfigure[$b_i= 1.0$ mi]{%
-             \label{fig:largeband} \includegraphics[width=5cm,keepaspectratio]{figures/large_band.pdf}
-          } % 
+             \label{fig:largeband} \includegraphics[width=.5\textwidth ,keepaspectratio]{figures/large_band.pdf}
+          }\\ % 
             \subfigure[$b_i=b_{i,opt}=0.43$ mi]{%
-             \label{fig:optband} \includegraphics[width=5cm,keepaspectratio]{figures/correct_band.pdf}
+             \label{fig:optband} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/correct_band.pdf}
           } % ------- End of the first row ----------------------%
       \end{center}
       \caption{ Visual depiction of the effect of different bandwidth values for heatmaps generated from KDE. The bandwidth is too small in \protect\subref{fig:smallband}, which is apparent from the many localized ``hotspots."  Conversely, the bandwidth is too large in \protect\subref{fig:largeband}, and the result is an overly smoothed heatmap. \protect\subref{fig:optband} shows the heatmap with the optimized bandwidth.}
@@ -138,10 +138,10 @@ A key consideration for generating meaningful results from KDE is the selection 
        \begin{center}
   %
           \subfigure[Histogram of optimized bandwidths]{%
-              \label{fig:bhist} \includegraphics[width=7.5cm,keepaspectratio]{figures/optimal_band_dist.pdf}
+              \label{fig:bhist} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/optimal_band_dist.pdf}
           }%
           \subfigure[Scatterplot of optimized bandwidths vs. average department population density]{%
-             \label{fig:popband} \includegraphics[width=7.5cm,keepaspectratio]{figures/boptvspopdensity.pdf}
+             \label{fig:popband} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/boptvspopdensity.pdf}
           } % 
            % ------- End of the first row ----------------------%
       \end{center}
@@ -158,13 +158,13 @@ A key consideration for generating meaningful results from KDE is the selection 
   In contrast to the models presented in the previous section, the focus of this section is to utilize only the socio-demographic and structural information from the American Community Survey 5-year summary file (ACS5). In this section, the fire incident location data is used only to assign each incident to a census tract. After these assignments, the ACS5 data is the sole basis of the training features. This means that the location of census tracts relative to other census tracts is not incorporated into the model described in this section.
 
   \subsubsection{Feature visualization}
-  Before designing the model that utilizes ACS5 data, it is worth understanding the underlying relationships between the fire rates in census tracts and their structural and socio-demographic profiles. Perhaps the most intuitive starting point is the recoginition that residential fires occur where people live, so one would expect a positive relationship between the rate of fires experienced by a census tract and its population. The authors found that normalizing these quantities by the census tract area improves the clarity of the relationship. It also allows for the delineation between urban and rural communities; as a rule of thumb, the Census Bureau   \cite{ratcliffe2016defining} uses a population density of 1,000 pop. per. sq. mile as a guideline for the cutoff between urban and rural for census blocks. Although the dataset is comprised of census tracts rather than blocks and this criterion serves as one component of the urban/rural designation, it still provides intuition for the separation between rural and urban communities, and as a result is chosen as the separating line in the figures. 
+  Before designing the model that utilizes ACS5 data, it is worth understanding the underlying relationships between the fire rates in census tracts and their structural and socio-demographic profiles. Perhaps the most intuitive starting point is the recoginition that residential fires occur where people live, so it is reasonable to expect a positive relationship between the rate of fires experienced by a census tract and its population. The authors found that normalizing these quantities by the census tract area improves the clarity of the relationship, which is shown in Figure \ref{fig:pop_relation}. It also allows for the delineation between urban and rural communities; as a rule of thumb, the Census Bureau   \cite{ratcliffe2016defining} uses a population density of 1,000 pop. per. sq. mile as a guideline for the cutoff between urban and rural for census blocks. Although the dataset is comprised of census tracts rather than blocks and this criterion serves as one component of the urban/rural designation, it still provides intuition for the separation between rural and urban communities, and as a result is chosen as the separating line in the figures. 
   
   
   
  \begin{figure}[htb] \centering
-\includegraphics[width=.5\textwidth]{figures/pop_relation.pdf}
-\caption{SPATIAL CORRELATION}
+\includegraphics[width=.75\textwidth]{figures/pop_relation.pdf}
+\caption{}
 \label{fig:pop_relation}
 \end{figure}
   
@@ -177,22 +177,22 @@ A key consideration for generating meaningful results from KDE is the selection 
        \begin{center}
   %
           \subfigure[Median income]{%
-              \label{fig:median_income} \includegraphics[width=7.5cm,keepaspectratio]{figures/median_income.pdf}
+              \label{fig:median_income} \includegraphics[width=.4\textwidth,keepaspectratio]{figures/median_income.pdf}
           }%
           \subfigure[Fraction of population holding college degrees]{%
-             \label{fig:frac_degree} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_degree.pdf}
+             \label{fig:frac_degree} \includegraphics[width=.4\textwidth,keepaspectratio]{figures/frac_degree.pdf}
           }\\ % 
             \subfigure[Fraction of population that is Black]{%
-             \label{fig:frac_black} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_black.pdf}
+             \label{fig:frac_black} \includegraphics[width=.4\textwidth,keepaspectratio]{figures/frac_black.pdf}
           }
             \subfigure[Fraction of population that is White]{%
-             \label{fig:frac_white} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_white.pdf}
+             \label{fig:frac_white} \includegraphics[width=.4\textwidth,keepaspectratio]{figures/frac_white.pdf}
           }\\
             \subfigure[Fraction of population that is Asian]{%
-             \label{fig:frac_asian} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_asian.pdf}
+             \label{fig:frac_asian} \includegraphics[width=.4\textwidth,keepaspectratio]{figures/frac_asian.pdf}
           }
             \subfigure[Fraction of population that is Hispanic]{%
-             \label{fig:frac_hispanic} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_hispanic.pdf}
+             \label{fig:frac_hispanic} \includegraphics[width=.4\textwidth,keepaspectratio]{figures/frac_hispanic.pdf}
           }
           
       \end{center}
@@ -204,16 +204,16 @@ A key consideration for generating meaningful results from KDE is the selection 
        \begin{center}
   %
           \subfigure[Fraction of housing units built before 1950]{%
-              \label{fig:frac_1950} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1950.pdf}
+              \label{fig:frac_1950} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/frac_1950.pdf}
           }%
           \subfigure[Fraction of housing units built between 1950 and 1969]{%
-             \label{fig:frac1950_1969} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1950_1969.pdf}
+             \label{fig:frac1950_1969} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/frac_1950_1969.pdf}
           }\\ % 
             \subfigure[Fraction of housing units built between 1970 and 1989]{%
-             \label{fig:frac_1970_1989} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1970_1989.pdf}
+             \label{fig:frac_1970_1989} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/frac_1970_1989.pdf}
           }
             \subfigure[Fraction of housing units built in 1990 or later]{%
-             \label{fig:frac_1990} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1990.pdf}
+             \label{fig:frac_1990} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/frac_1990.pdf}
           }\\
           
       \end{center}
@@ -226,16 +226,16 @@ A key consideration for generating meaningful results from KDE is the selection 
        \begin{center}
   %
           \subfigure[Fraction of housing units occupied by a renter]{%
-              \label{fig:frac_rented} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_rented.pdf}
+              \label{fig:frac_rented} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/frac_rented.pdf}
           }%
           \subfigure[Fraction of housing units occupied by the owner]{%
-             \label{fig:frac_owner} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_owner.pdf}
+             \label{fig:frac_owner} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/frac_owner.pdf}
           }\\ %           
           \subfigure[Fraction of housing units that are vacant ]{%
-             \label{fig:frac_vacant} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_vacant.pdf}
+             \label{fig:frac_vacant} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/frac_vacant.pdf}
           } % 
             \subfigure[Fraction of housing units that are single (not apartments)]{%
-             \label{fig:frac_1_unit} \includegraphics[width=7.5cm,keepaspectratio]{figures/frac_1_unit.pdf}
+             \label{fig:frac_1_unit} \includegraphics[width=.5\textwidth,keepaspectratio]{figures/frac_1_unit.pdf}
           }
       \end{center}
       \caption{Scatterplot of observed fire density rates ($\hat\Lambda_{count}$) during the training interval as a function of population density for census tracts in the top quartile (red) and bottom quartile (blue) of the specified quantity relating to occupancy. For example, in \protect\subref{fig:frac_rented}, the red dots represent census tracts with fractions of housing units occupied by a renter in the top 25\% of all tracts in the dataset. Conversely, the blue dots represent census tracts with fractions of housing units occupied by a renter in the bottom 25\% of all census tracts in the dataset.}

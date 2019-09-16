@@ -169,7 +169,7 @@ A key consideration for generating meaningful results from KDE is the selection 
     \label{fig:pop_relation}
     \end{figure}
   
-  In light of the linear relationship shown in Figure \ref{fig:pop_relation}, the effects of other socio-demographic factors that influence fire risk can be understood in terms of ``shifts" to the approximately linear cloud of points representing census tracts. This is shown in Figure \ref{fig:sociodemographic}.
+  In light of the linear relationship shown in Figure \ref{fig:pop_relation}, the effects of other socio-demographic factors that influence fire risk can be understood in terms of upward or downward ``shifts" to the approximately linear cloud of points representing census tracts. This also can be viewed as changes in the fire rate per person. This is shown in Figure \ref{fig:sociodemographic}.
   
   \begin{figure}[!ht]
        \begin{center}
@@ -200,7 +200,7 @@ A key consideration for generating meaningful results from KDE is the selection 
  
  These visualizations give insight into the populations who are most at risk for residential fires. Figures \ref{fig:median_income} and \ref{fig:frac_degree} show the expected result that census tracts with educated and high earning populations experience fires at a lower rate than those with low income or less educated populations. Interestingly, the relationship within the top and bottom quartiles of these quantities still appears linear, but the effect of increased socioeconomic status appears to shift the linear trend downward in the log-log plots. The effects of the racial and ethnic compositions shown in Figures \ref{fig:frac_black}-\ref{fig:frac_hispanic} show similar trends, which is likely due to the fact that these quantities are correlated with the socioeconomic factors shown in Figures \ref{fig:median_income} and \ref{fig:frac_degree}. 
  
-Figure \ref{fig:building age} gives insight into the effect of building age on the fire frequency. The visualizations show the expected result that residential fires are more likely to occur in older buildings than newer ones. Interestingly, the census tracts with the highest fractions of buildings built before 1950 appear mostly in urbanized areas in the dataset. 
+Figure \ref{fig:building age} gives insight into the effect of building age on the fire frequency. The visualizations show the expected result that residential fires are more likely to occur in older buildings than newer ones. Interestingly, the census tracts with the highest fractions of buildings built before 1950 appear mostly in urbanized areas in the dataset, yet the cloud of points comprised of these census tracts appears to lie slightly above that comprised of the census tracts with fractions of buildings built before 1950 in the bottom quartile. Conversely, census tracts with a large fraction of housing units built more recently than 1990 have lower population densities and a slightly lower fire risk per person as well.
 
    \begin{figure}[!ht]
        \begin{center}
@@ -223,12 +223,7 @@ Figure \ref{fig:building age} gives insight into the effect of building age on t
      \label{fig:building age}
   \end{figure}
  
- 
- 
- 
- 
- 
- 
+    Lastly, Figure \ref{fig:occupancy} gives insight into the effect of different occupancy characteristics on residential fire risk. Again, the expected trends appear- the fire risk appears to be greater in census tracts with higher fractions of renter-occupied housing compared to owner-occupied housing. Also, the differences in these features is correlated with population density with the top quartile of renter-occupied census tracts are mostly urbanized. Large fractions of housing on fire risk per person shown in Figure \ref{fig:frac_vacant} also appears to elevate the residential fire risk per person,  but the top quartile appears to have more variability in the fire risk per person than the bottom quartile. Not surprsingly, census tracts with large fractions of single-unit housing follows similar trends as those with high fractions of owner occupied units. 
  
    \begin{figure}[!ht]
        \begin{center}
@@ -251,11 +246,13 @@ Figure \ref{fig:building age} gives insight into the effect of building age on t
   \end{figure}
  
  
- 
- 
- 
  \clearpage
   \subsubsection{A hierarchical Bayesian Poisson regression model}
+  The feature visualizations presented in the previous section motivated the use of a Bayesian Poisson regression model. However, because some of the ACS5 variables are correlated, a principal components analysis (PCA) was conducted to reduce the number of feature variables. This is an unsupervised machine learning method that involves projecting the input data into a new space where certain dimensions can be disregarded while still retaining a large fraction of the variance of the original dataset. 
+  
+  
+  
+  
   
   
   \subsection{Combining spatial, structural, and demographic information}
@@ -269,7 +266,7 @@ Figure \ref{fig:building age} gives insight into the effect of building age on t
 \end{figure}
 
   
-  \begin{figure}[!htt]
+  \begin{figure}[!htb]
        \begin{center}
   %
           \subfloat[Layout of census tracts]{%

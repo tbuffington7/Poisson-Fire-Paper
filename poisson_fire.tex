@@ -248,7 +248,23 @@ Figure \ref{fig:building age} gives insight into the effect of building age on t
  
  \clearpage
   \subsubsection{A hierarchical Bayesian Poisson regression model}
-  The feature visualizations presented in the previous section motivated the use of a Bayesian Poisson regression model. However, because some of the ACS5 variables are correlated, a principal components analysis (PCA) was conducted to reduce the number of feature variables. This is an unsupervised machine learning method that involves projecting the input data into a new space where certain dimensions can be disregarded while still retaining a large fraction of the variance of the original dataset. 
+  The feature visualizations presented in the previous section motivated the use of a Bayesian Poisson regression model. However, because some of the ACS5 variables are correlated, a principal components analysis (PCA) was conducted to reduce the number of feature variables. This is a statistical technique that utilizes correlations between input variables to reduce the dimensionality of the dataset. This is done by projecting the input data into a new space where certain dimensions can be disregarded while still retaining most of the variation of the original dataset. The projection vectors are the eigenvectors of the covariance matrix of feature variables and the transformed features are linearly uncorrelated. A simple example of this technique is illustrated in \ref{fig:pca}.
+  
+    \begin{figure}[!htb]
+       \begin{center}
+  %
+          \subfloat[Layout of census tracts]{%
+              \label{fig:tract_layout} \includegraphics[width=.4\textwidth,keepaspectratio]{figures/pca_raw.pdf}
+          }%
+          \subfloat[Distance matrix based on neighbors]{%
+             \label{fig:distance_mat} \includegraphics[width=.45\textwidth,keepaspectratio]{figures/pca_projected.pdf}
+          } %           
+      \end{center}
+      \caption{An example of the resulting distance matrix for a department}
+     \label{fig:pca}
+  \end{figure}
+  
+  
   
   
   
